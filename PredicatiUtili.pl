@@ -10,3 +10,8 @@ listaElementiUguali(X, N, List)  :-
 
 listaElementiUguali(X, N, List)  :- 
     findall(X, between(1, N, _), List).
+    
+/* predicato vero se X è una sottosequenza di L */   
+sequenza(X,L):-
+    append(_,Fine,L),
+    append(X,_,Fine).
