@@ -106,5 +106,35 @@ compress([A|Coda],[A|CodaCompressa]):-
     
 
 
+/*
+ * P09 (**) Pack consecutive duplicates of list elements into sublists.
+ * 			If a list contains repeated elements they should be
+ * 			placed in separate sublists.
+ * 
+ * 			Example:
+ * 			?- pack([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
+ * 			X = [[a,a,a,a],[b],[c,c],[a,a],[d],[e,e,e,e]]
+ * */
+ 
+listaTuttiElementiUguali([Elem],Elem).
+listaTuttiElementiUguali([Elem|R],Elem):-
+    listaTuttiElementiUguali(R,Elem).
+
+/* dividi([a,a,a,b,c,d,s,a,a], [a,a,a], [b,c,d,s,a,a]) è vera. */
+dividi([],[],[]).
+dividi(A,A,[]):-
+    listaTuttiElementiUguali(A,_).
+dividi(L,A,[B|R]):-
+    append(A,[B|R],L),
+    last(A,UltimoA),
+    UltimoA \= B,
+    listaTuttiElementiUguali(A,_).
+
+
+pack([],[]):-!.
+pack(L,[Pack1|R]):-
+    dividi(L,Pack1,Coda),
+    pack(Coda,R).
+
 
 
