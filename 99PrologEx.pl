@@ -74,6 +74,36 @@ my_flatten([A|Coda],Flat):-
     my_flatten(Coda,Flat2),
     append([A],Flat2,Flat).
     
+    
+/*
+ * P08 (**) Eliminate consecutive duplicates of list elements.
+ * 		If a list contains repeated elements they should be replaced with a
+ * 		single copy of the element. The order of the elements should not be changed.
+ * 
+ * 		Example:
+ * 		?- compress([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
+ * 		X = [a,b,c,a,d,e]
+ * */
+
+/* 
+ * Vero se la lista LOut è uguale alla lista L senza
+ * la presenza dell'elemento E
+ * */
+rimuovi(L,E,L):-
+    not(member(E,L)),!.
+
+rimuovi([E|R],E,LOut):-
+    rimuovi(R,E,LOut).
+
+rimuovi([A|R],E,[A|LOut]):-
+    A \= E,
+    rimuovi(R,E,LOut).
+
+compress([],[]).
+compress([A|Coda],[A|CodaCompressa]):-
+    rimuovi(Coda,A,CodaSenzaA),
+    compress(CodaSenzaA,CodaCompressa).
+    
 
 
 
