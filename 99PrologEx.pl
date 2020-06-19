@@ -196,6 +196,12 @@ encode_modified(L,X):-
  * */
 
 
+listaNElementiUguali([],_,0):-!.
+listaNElementiUguali(L,Elem,N):-
+    listaTuttiElementiUguali(L,Elem),
+    length(L,N),!.
+
+
 decode([],[]).
 decode([[N,E]|R1],L):-
     listaNElementiUguali(A,E,N),
