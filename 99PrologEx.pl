@@ -183,5 +183,28 @@ packedListToEconded_modified([[A]|R1],[A|R2]):-
 encode_modified(L,X):-
     pack(L,PackedL),
     packedListToEconded_modified(PackedL,X).
+    
+    
+    
+/*
+ * 12 (**) Decode a run-length encoded list.
+ * Given a run-length code list generated as specified in problem P11.
+ * Construct its uncompressed version.
+ * 		Example:
+ * 		?- decode([[4,a],b,[2,c],[2,a],d,[4,e]],X).
+ * 		X = [a,a,a,a,b,c,c,a,a,d,e,e,e,e].
+ * */
+
+
+decode([],[]).
+decode([[N,E]|R1],L):-
+    listaNElementiUguali(A,E,N),
+    decode(R1,R2),
+    flatten([A|R2],L).
+    %my_flatten([A|R2],L).
+    
+decode([A|R1],[A|R2]):-
+    not(is_list(A)),
+    decode(R1,R2).
 
 
