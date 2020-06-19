@@ -137,4 +137,80 @@ pack(L,[Pack1|R]):-
     pack(Coda,R).
 
 
+/*
+ * P10 (*) Run-length encoding of a list.
+ * 	    Use the result of problem P09 to implement the so-called
+ *	    run-length encoding data compression method.
+ *	    Consecutive duplicates of elements are encoded as terms [N,E]
+ *	    where N is the number of duplicates of the element E.
+ * 
+ * 	    Example:
+ * 	    ?- encode([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
+ * 	    X = [[4,a],[1,b],[2,c],[2,a],[1,d][4,e]]
+ * */
+packedListToEconded([],[]).
+packedListToEconded([A|R1],[[N,E]|R2]):-
+    length(A,N),
+    member(E,A),!,
+    packedListToEconded(R1,R2).
+
+encode(L,X):-
+    pack(L,PackedL),
+    packedListToEconded(PackedL,X).
+
+
+/*
+ * P11 (*) Modified run-length encoding.
+ * 		Modify the result of problem P10 in such a way that if an
+ * 		element has no duplicates it is simply copied into the
+ * 		result list.
+ * 		Only elements with duplicates are transferred as [N,E] terms.
+ * 
+ * 		Example:
+ * 		?- encode_modified([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
+ * 		X = [[4,a],b,[2,c],[2,a],d,[4,e]]
+ * */
+packedListToEconded_modified([],[]).
+packedListToEconded_modified([A|R1],[[N,E]|R2]):-
+    length(A,N),
+    N > 1,
+    member(E,A),!,
+    packedListToEconded_modified(R1,R2).
+
+packedListToEconded_modified([[A]|R1],[A|R2]):-
+    packedListToEconded_modified(R1,R2).
+
+encode_modified(L,X):-
+    pack(L,PackedL),
+    packedListToEconded_modified(PackedL,X).
+    
+    
+    
+/*
+ * 12 (**) Decode a run-length encoded list.
+ * Given a run-length code list generated as specified in problem P11.
+ * Construct its uncompressed version.
+ * 		Example:
+ * 		?- decode([[4,a],b,[2,c],[2,a],d,[4,e]],X).
+ * 		X = [a,a,a,a,b,c,c,a,a,d,e,e,e,e].
+ * */
+
+
+listaNElementiUguali([],_,0):-!.
+listaNElementiUguali(L,Elem,N):-
+    listaTuttiElementiUguali(L,Elem),
+    length(L,N),!.
+
+
+decode([],[]).
+decode([[N,E]|R1],L):-
+    listaNElementiUguali(A,E,N),
+    decode(R1,R2),
+    flatten([A|R2],L).
+    %my_flatten([A|R2],L).
+    
+decode([A|R1],[A|R2]):-
+    not(is_list(A)),
+    decode(R1,R2).
+
 
