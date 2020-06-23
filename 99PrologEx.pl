@@ -37,7 +37,7 @@ len([_|R],N):-
 rev([],[]).
 rev([A|R1],L):-
     append(R2,[A],L),
-    rev(R1,R2).
+    rev(R1,R2),!.
 
 /* P06 (*) Find out whether a list is a palindrome.
  * A palindrome can be read forward or backward; e.g. [x,a,m,a,x].
