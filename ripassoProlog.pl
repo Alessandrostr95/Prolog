@@ -72,8 +72,7 @@ palindroma([_X]).
 
 palindroma([Testa|Coda]):-
     ultimo(Testa,Coda),
-    inverti_lista(CodaInvertita,Coda),
-    CodaInvertita =[_PrimoEl|Resto],
+    inverti_lista([_PrimoEl|Resto],Coda),
     palindroma(Resto).
  
 
@@ -240,9 +239,19 @@ splitt(List, N, Sub1, Sub2):-
 
 %31-Determina se un numero e' primo
 %is_prime(7)
-is_prime(2):-!.
+is_prime(2).
 
-    
+/*
+is_prime(N):-
+    \+ not_prime(N),
+    asserta(is_prime(N)).
+
+not_prime(N):-
+    integer(N),
+    N1 in 2..N,
+    N1 #\= N,
+    N mod N1 #= 0.
+*/   
 
 
 %32-Determina il massimo comun divisore di due interi
@@ -257,8 +266,53 @@ is_prime(2):-!.
 
 %========BINARY TREES=====================
 
+%54-Controlla se un dato termine e' un albero o meno
+%istree(+Termine)
 
+istree(nil).
+istree(X):-
+    atomic(X).
 
+istree(t(A,B,C)):-
+    A \= nil,
+    istree(A),
+    istree(B),
+    istree(C),!.
+
+%55-Costruisci alberi binary bilanciati
+%cbal_tree(+Numero nodi, ?AlberoBilanciato)
+
+cbal_tree(1, t(x,nil,nil)).
+cbal_tree(0, nil).
+    
+cbal_tree(N, t(x,B,C)):-
+    integer(N),
+    N #\= 0,
+    N #\= 1,
+    ((N-1) mod 2) #= 0,
+    N1 is (N-1) / 2,
+    cbal_tree(N1, B),
+    cbal_tree(N1, C).
+ 
+cbal_tree(N, t(x,B,C)):-
+    integer(N),
+    N #\= 0,
+    N #\= 1,
+    ((N-1) mod 2) #= 1,
+    N1 is (N-1) // 2,
+    N2 is N1+1,
+    cbal_tree(N1, B),
+    cbal_tree(N2, C).
+
+cbal_tree(N, t(x,B,C)):-
+    integer(N),
+    N #\= 0,
+    N #\= 1,
+    ((N-1) mod 2) #= 1,
+    N1 is (N-1) // 2,
+    N2 is N1+1,
+    cbal_tree(N2, B),
+    cbal_tree(N1, C).
 
 %=======MULTIWAY TREES=======================
 
